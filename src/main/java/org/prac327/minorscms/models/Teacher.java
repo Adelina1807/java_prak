@@ -39,12 +39,17 @@ public class Teacher {
     private String phone;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "company_id")
+    @JoinColumn(name = "company")
     @ToString.Exclude
-    @NonNull
+//    @NonNull
     private Company company;
 
     @OneToMany(cascade=CascadeType.ALL, mappedBy = "teacher", fetch = FetchType.LAZY)
     List<Teachers2Courses> courses;
 
+    public String getInitials(){
+        return lastname + "  "
+                + name.charAt(0) + ". "
+                + (fathername != null ? fathername.charAt(0) + "." : "");
+    }
 }

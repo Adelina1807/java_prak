@@ -23,13 +23,11 @@ public class Course {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "company_id")
+    @JoinColumn(name = "company")
     @ToString.Exclude
     @NonNull
     private Company company;
 
-    @Column(name = "photo")
-    private String photo;
 
     @Column(nullable = false, name = "description")
     @NonNull

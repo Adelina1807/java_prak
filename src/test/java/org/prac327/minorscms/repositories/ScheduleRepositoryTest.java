@@ -66,13 +66,13 @@ class ScheduleRepositoryTest {
 
     }
 
-    private Schedule createSchedule(Teachers2Courses teach_cour, String classroom, String dayOfWeek, Time start_time, Time end_time) {
+    private Schedule createSchedule(Teachers2Courses teachCour, String classroom, String dayOfWeek, Time start_time, Time end_time) {
         Schedule schedule = new Schedule();
-        schedule.setTeach_cour(teach_cour);
+        schedule.setTeachCour(teachCour);
         schedule.setClassroom(classroom);
         schedule.setDayOfWeek(dayOfWeek);
-        schedule.setStart_time(start_time);
-        schedule.setEnd_time(end_time);
+        schedule.setStart_time(start_time.toString());
+        schedule.setEnd_time(end_time.toString());
         return schedule;
     }
 
@@ -80,7 +80,7 @@ class ScheduleRepositoryTest {
     void save_ShouldReturnSavedSchedule() {
         // Create a sample Schedule entity
         Schedule schedule = createSchedule(tcStub, "001", "Monday", Time.valueOf("8:45:0"), Time.valueOf("10:20:0") );
-        // Set the necessary fields (e.g., teach_cour, dayOfWeek, start_time, end_time, classroom)
+        // Set the necessary fields (e.g., teachCour, dayOfWeek, start_time, end_time, classroom)
         // ...
 
         // Save the schedule
@@ -88,7 +88,13 @@ class ScheduleRepositoryTest {
 
         // Assert that the schedule is saved correctly
         assertNotNull(savedSchedule.getId());
-        assertEquals(savedSchedule, schedule);
+//        assertEquals(savedSchedule, schedule);
+        assertEquals(schedule.getId(), savedSchedule.getId());
+        assertEquals(schedule.getDayOfWeek(), savedSchedule.getDayOfWeek());
+        assertEquals(schedule.getStart_time(), savedSchedule.getStart_time());
+        assertEquals(schedule.getEnd_time(), savedSchedule.getEnd_time());
+        assertEquals(schedule.getClassroom(), savedSchedule.getClassroom());
+        assertEquals(schedule.getTeachCour(), savedSchedule.getTeachCour());
     }
 
     @Test
@@ -110,6 +116,7 @@ class ScheduleRepositoryTest {
         // Assert that the list contains the expected schedules
         assertFalse(schedules.isEmpty());
         assertEquals(expected, schedules);
+
         // ... (Add specific assertions based on your test data)
     }
 
@@ -177,6 +184,65 @@ class ScheduleRepositoryTest {
         schedules = scheduleRepository.findByClassroom("P12");
         assertTrue(schedules.isEmpty());
         // ... (Add specific assertions based on your test data)
+    }
+
+    @Test
+    void findByCourse_ShouldReturnAllSchedulesForCourse(){
+
+        Teacher teacher1 = new Teacher();
+        teacher1.setName("teee");
+        teacher1.setLastname("aaaacher");
+        teacher1.setCompany(companyRepository.findAll().get(0));
+        teacherRepository.save(teacher1);
+
+        Teacher teacher2 = new Teacher();
+        teacher2.setName("ano");
+        teacher2.setLastname("ther");
+        teacher2.setCompany(companyRepository.findAll().get(0));
+        teacherRepository.save(teacher2);
+
+        Course course1 = new Course();
+        course1.setName("best course 1");
+        course1.setCompany(companyRepository.findAll().get(0));
+        course1.setDescription("very interesting");
+        courseRepository.save(course1);
+
+        Course course2 = new Course();
+        course2.setName("best course 2");
+        course2.setCompany(companyRepository.findAll().get(0));
+        course2.setDescription("very interesting");
+        courseRepository.save(course2);
+
+        Teachers2Courses tc1 = new Teachers2Courses();
+        tc1.setCourse(course1);
+        tc1.setTeacher(teacher1);
+
+        Teachers2Courses tc2 = new Teachers2Courses();
+        tc2.setCourse(course2);
+        tc2.setTeacher(teacher1);
+
+        Teachers2Courses tc3 = new Teachers2Courses();
+        tc3.setCourse(course2);
+        tc3.setTeacher(teacher2);
+
+        entityManager.persist(tc1);
+        entityManager.persist(tc2);
+        entityManager.persist(tc3);
+
+        List<Schedule> expected = List.of(
+                createSchedule(tc1, "001", "Monday", Time.valueOf("8:45:0"), Time.valueOf("10:20:0") ),
+                createSchedule(tc1, "001", "Monday", Time.valueOf("10:30:0"), Time.valueOf("12:05:0") ),
+                createSchedule(tc2, "001", "Wednesday", Time.valueOf("14:45:0"), Time.valueOf("16:30:0") ),
+                createSchedule(tc2, "002", "Monday", Time.valueOf("8:45:0"), Time.valueOf("10:20:0") ),
+                createSchedule(tc3, "P14", "Tuesday", Time.valueOf("10:30:0"), Time.valueOf("12:0:0") )
+        );
+        scheduleRepository.saveAll(expected);
+
+        List<Schedule> result1 = scheduleRepository.findByCourse(course1);
+        List<Schedule> result2 = scheduleRepository.findByCourse(course2);
+
+        assertEquals(expected.subList(0,2), result1);
+        assertEquals(expected.subList(2,5), result2);
     }
 
     @Test

@@ -19,12 +19,10 @@ public class Company {
     @NonNull
     private String name;
 
-    @Column(name = "shortname", unique = true)
+    @Column(name = "shortname", unique = true, nullable = false)
     @NonNull
     private String shortname;
 
-    @Column(name = "photo")
-    private String photo;
 
     @Column(nullable = false, name = "description")
     @NonNull

@@ -1,13 +1,13 @@
-insert into companies (address, description, name, phone, photo, shortname)
+insert into companies (address, description, name, phone,  shortname)
 values
-    ('Санкт-Петербург, Невский пр-кт, 128', 'Крупный банк','Банк Санкт-Петербург', null, null, 'БСПб'),
-    ('San Francisco, 5 avenue, 1', 'Large company, that produce lots of soft','Microsoft', null, null, 'MS'),
-    ('Москва, Ленинские горы, 12к7', 'Один из крупнейших суперкомпьютерных центрова','Научно-исследовательский вычислительный центр при Московском государственном университете им. Ломоносова', null, null, 'НИВЦ МГУ'),
-    ('Москва, Карсноармейская, 12', 'Один из институтов Российской Академии Наук','Институт Системного Программирования им. Иванникова Российской Академии Наук', null, null, 'ИСП РАН'),
-    ('Москва, Ленинский горы, 12к1', 'Факультет МГУ','Факультет Вычислистельной математики и кибернетики Московского государственного университета им. Ломоносова', null, null, 'ВМК МГУ');
+    ('Санкт-Петербург, Невский пр-кт, 128', 'Крупный банк','Банк Санкт-Петербург', null, 'БСПб'),
+    ('San Francisco, 5 avenue, 1', 'Large company, that produce lots of soft','Microsoft', null, 'MS'),
+    ('Москва, Ленинские горы, 12к7', 'Один из крупнейших суперкомпьютерных центрова','Научно-исследовательский вычислительный центр при Московском государственном университете им. Ломоносова', null, 'НИВЦ МГУ'),
+    ('Москва, Карсноармейская, 12', 'Один из институтов Российской Академии Наук','Институт Системного Программирования им. Иванникова Российской Академии Наук', null, 'ИСП РАН'),
+    ('Москва, Ленинский горы, 12к1', 'Факультет МГУ','Факультет Вычислистельной математики и кибернетики Московского государственного университета им. Ломоносова', null, 'ВМК МГУ');
 
 
-insert into courses ( description, name, company_id)
+insert into courses ( description, name, company)
 values
     ('Курс про то, как настраивать авторизацию, проверять пароли, хранить секретные данные',
      'Безопасный Backend', (SELECT id FROM companies WHERE shortname='БСПб')),
@@ -29,7 +29,7 @@ values
      'Язык Rust', (SELECT id FROM companies WHERE shortname='ВМК МГУ'));
 
 
-insert into teachers (education, fathername, lastname, mail, name, company_id)
+insert into teachers (education, fathername, lastname, mail, name, company)
 values
     ('ВМК МГУ', null, 'Петров', 'petrov@cs.msu.ru', 'Иван', (SELECT id FROM companies WHERE shortname = 'ВМК МГУ')),
     ('ВМК МГУ', null, 'Капустин', 'cabbage@mail.ru', 'Николай', (SELECT id FROM companies WHERE shortname = 'ВМК МГУ')),

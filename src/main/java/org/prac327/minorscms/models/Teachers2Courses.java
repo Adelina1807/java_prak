@@ -1,10 +1,9 @@
 package org.prac327.minorscms.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.ToString;
+import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "teachers_courses",
@@ -12,7 +11,9 @@ import lombok.ToString;
                 @UniqueConstraint(columnNames = {"teacher_id", "course_id"})
         }
 )
-@Data
+@Getter
+@Setter
+//@ToString
 @NoArgsConstructor
 public class Teachers2Courses {
 
@@ -32,5 +33,12 @@ public class Teachers2Courses {
     @ToString.Exclude
     @NonNull
     private Teacher teacher;
+//
+//    @OneToMany(mappedBy = "teachCour", fetch = FetchType.LAZY)
+//    private List<Schedule> schedules;
 
+    public Teachers2Courses(@NonNull Teacher teacher, @NonNull Course course) {
+        this.teacher = teacher;
+        this.course = course;
+    }
 }
